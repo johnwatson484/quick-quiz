@@ -1,0 +1,44 @@
+﻿@model QuickQuiz.Models.Session.AssessmentQuestion
+
+@using QuickQuiz.Extensions
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<div>
+    @Html.DisplayFor(model => model.Question.Text)
+    <br />
+    <br />
+    @if (Model.Question.MarkdownReference != null)
+    {
+        { Html.RenderAction("_Markdown", "Markdown", new { reference = Model.Question.MarkdownReference }); }
+    }
+
+    @foreach (var answer in Model.Question.Answers)
+    {
+        <div class="row">
+            <div class="col-md-10">
+                @Html.PreserveNewLine(answer.Text)
+            </div>
+            <div class="col-md-2">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="selected-answer" data-answer="@answer.AnswerId" data-question="@Model.Question.QuestionId" />
+                        <span id="correct-answer-@answer.AnswerId" style="display:none; color:forestgreen" class="glyphicon glyphicon-ok"></span>
+                        <span id="incorrect-answer-@answer.AnswerId" style="display:none; color:red" class="glyphicon glyphicon-remove"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" id="btn-submit" class="btn btn-primary pull-right" disabled>Submit</button>
+            <button type="button" id="btn-next" class="btn btn-default pull-right" onclick="location.href='@Url.Action("Question")'" style="display:none;">Next</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/application")
+}

@@ -1,0 +1,28 @@
+﻿@model QuickQuiz.Models.ViewModels.QuestionAnswers
+
+@{
+    ViewBag.Title = "Question";
+}
+
+@using QuickQuiz.Extensions
+
+<h2>Question Details</h2>
+
+<div>
+    <p>@Html.PreserveNewLine(Model.Question.Text)</p>
+
+    @if (Model.Question.MarkdownReference != null)
+    {
+        {Html.RenderAction("_Markdown", "Markdown", new { reference = Model.Question.MarkdownReference });}
+    }
+
+    @foreach (var answer in Model.Answers)
+    {
+        <p>@Html.PreserveNewLine(answer.Text)</p>
+    }
+
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { questionId = Model.Question.QuestionId }) |
+    @Html.ActionLink("Back to List", "Index", new { quizId = Model.Question.QuizId })
+</p>

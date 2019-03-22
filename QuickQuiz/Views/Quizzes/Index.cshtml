@@ -1,0 +1,105 @@
+﻿@model List<QuickQuiz.Models.Quiz>
+
+@{
+    ViewBag.Title = "Quizzes";
+}
+
+<h2>Quizzes</h2>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+
+<p>Starting quiz will select 50 random questions, alternatively select a custom amount of questions to answer.</p>
+
+@if (Model.Count > 0)
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Description)
+            </th>
+            <th>
+                @Html.DisplayName("Custom Questions")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].TotalQuestions)
+            </th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Active)
+                </th>
+                <th></th>
+            }
+        </tr>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @if (item.TotalQuestions == 0)
+                {
+                    @item.Title
+                }
+                else
+                {
+                    @Html.ActionLink(item.Title, "Start", "Assessment", new { quizId = item.QuizId }, null)
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @if (item.TotalQuestions == 0)
+                {
+                    @item.TotalQuestions
+                }
+                else
+                {
+                    @Html.ActionLink("10", "Start", "Assessment", new { quizId = item.QuizId, questions = 10 }, null)
+
+                    if (item.TotalQuestions >= 20)
+                    {
+                        @:| @Html.ActionLink("20", "Start", "Assessment", new { quizId = item.QuizId, questions = 20 }, null)
+                    }
+
+                    if (item.TotalQuestions >= 50)
+                    {
+                        @:| @Html.ActionLink("50", "Start", "Assessment", new { quizId = item.QuizId, questions = 50 }, null)
+                    }
+
+                    if (item.TotalQuestions >= 100)
+                    {
+                        @:| @Html.ActionLink("100", "Start", "Assessment", new { quizId = item.QuizId, questions = 100 }, null)
+                    }
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalQuestions)
+            </td>
+            @if (User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.QuizId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.QuizId })
+                </td>
+            }
+        </tr>
+        }
+
+    </table>
+}
+else
+{
+    <p>Check back later for more Quick Quizzes</p>
+}

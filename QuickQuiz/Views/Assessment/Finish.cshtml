@@ -1,0 +1,51 @@
+﻿@model QuickQuiz.Models.Session.Assessment
+
+@{
+    ViewBag.Title = "Assessment Results";
+}
+
+@using QuickQuiz.Extensions
+
+<h2>Assessment Results</h2>
+
+<h1>Your scored @Html.DisplayFor(model => model.Performance)%</h1>
+
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            Questions Answered
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Questions)
+        </dd>
+        <dt>
+            Correct Answers
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Correct)
+        </dd>
+        <dt>
+            Incorrect Answers
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Incorrect)
+        </dd>
+    </dl>
+</div>
+
+@if (Model.Incorrect > 0)
+{
+    <h3>Correct Answers</h3>
+
+    foreach (var question in Model.AssessmentQuestions)
+    {
+        if (!question.Correct)
+        {
+            <p>@Html.DisplayFor(modelItem => question.Question.Text)</p>
+            <p>@Html.PreserveNewLine(question.Question.CorrectAnswer)</p>
+        }
+    }
+}
+
+@Html.ActionLink("Main Menu", "Index", "Quizzes")
